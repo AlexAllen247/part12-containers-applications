@@ -1,0 +1,23 @@
+services:
+  app:
+    image: my-app-frontend
+    build: ./frontend
+    volumes:
+      - ./frontend:/usr/src/app
+    container_name: my-app-frontend
+  server:
+    image: my-app-backend
+    build: ./backend
+    volumes:
+      - ./backend:/usr/src/app
+    container_name: my-app-backend
+  nginx:
+    image: nginx:1.20.1
+    build: ./frontend
+    volumes:
+      - ./nginx.prod.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    depends_on:
+      - app
+      - server
